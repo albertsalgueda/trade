@@ -12,8 +12,7 @@ Added multiprocessing, to train in a distributed system.
 Added market indicators to improve performance.
 
 Added normalization ( substract the derivative at each time step from their value at a previous time step ) 
-![Uploading Screenshot 2022-03-19 at 17.56.54.png…]()
-
+<img width="1106" alt="Screenshot 2022-03-19 at 17 56 54" src="https://user-images.githubusercontent.com/73529639/159141257-cdf70d52-6cbf-462b-b6ce-1a1779cc18f1.png">
 
 
 # MODEL ARCHITECTURE
