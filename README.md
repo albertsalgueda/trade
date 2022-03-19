@@ -2,4 +2,4 @@
 In this project you'll find the code and documentation for the crypto-trading bot
 
 # MODEL ARCHITECTURE
-!https://user-images.githubusercontent.com/73529639/159140782-fb0c59ea-40ab-4fbc-9bc7-2f9f0c76d962.png
+<img width="519" alt="Screenshot 2022-03-19 at 17 17 20" src="https://user-images.githubusercontent.com/73529639/159140810-bc7a6a47-9da1-4f78-a1ff-0be915334c83.png">
