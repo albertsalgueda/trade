@@ -8,8 +8,12 @@ Alpha works bugless without market indicators, needs several optimizations
 
 # BETA 
 Added multiprocessing, to train in a distributed system.
+
 Added market indicators to improve performance.
+
 Added normalization ( substract the derivative at each time step from their value at a previous time step ) 
+![Uploading Screenshot 2022-03-19 at 17.56.54.png…]()
+
 
 
 # MODEL ARCHITECTURE
