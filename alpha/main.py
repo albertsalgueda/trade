@@ -97,13 +97,6 @@ class CustomAgent:
         
         # Compute advantages
         advantages, target = self.get_gaes(rewards, dones, np.squeeze(values), np.squeeze(next_values))
-        '''
-        plt.plot(target,'-')
-        plt.plot(advantages,'.')
-        ax=plt.gca()
-        ax.grid(True)
-        plt.show()
-        '''
         # stack everything to numpy array
         y_true = np.hstack([advantages, predictions, actions])
         
@@ -242,6 +235,7 @@ class CustomEnv:
             self.crypto_held -= self.crypto_sold
             self.trades.append({'Date' : Date, 'High' : High, 'Low' : Low, 'total': self.crypto_sold, 'type': "sell", 'current_price': current_price})
             self.episode_orders += 1
+            closeTrade(self.crypto_sold,self.trades)
 
         self.prev_net_worth = self.net_worth
         self.net_worth = self.balance + self.crypto_held * current_price
@@ -399,13 +393,12 @@ def main():
     test_df = df[-test_window-lookback_window_size:]
     print(train_df)
     agent = CustomAgent(lookback_window_size=lookback_window_size, lr=0.00001, epochs=1, optimizer=Adam, batch_size = 32, model="Dense")
-    train_env = CustomEnv(train_df, lookback_window_size=lookback_window_size)
-    train_agent(train_env, agent, visualize=False, train_episodes=2000, training_batch_size=500)
+    #train_env = CustomEnv(train_df, lookback_window_size=lookback_window_size)
+    #train_agent(train_env, agent, visualize=False, train_episodes=2000, training_batch_size=500)
     
-    """
     test_env = CustomEnv(test_df, lookback_window_size=lookback_window_size, Show_reward=False)
-    test_agent(test_env, agent, visualize=False, test_episodes=10, folder="2021_01_11_13_32_Crypto_trader", name="1277.39_Crypto_trader", comment="")
-
+    test_agent(test_env, agent, visualize=False, test_episodes=10, folder="2022_03_19_18_23_Crypto_trader", name="1005.06_Crypto_trader", comment="")
+    """
     agent = CustomAgent(lookback_window_size=lookback_window_size, lr=0.00001, epochs=1, optimizer=Adam, batch_size = 32, model="CNN")
     test_env = CustomEnv(test_df, lookback_window_size=lookback_window_size, Show_reward=False)
     test_agent(test_env, agent, visualize=False, test_episodes=10, folder="2021_01_11_23_48_Crypto_trader", name="1772.66_Crypto_trader", comment="")
@@ -415,17 +408,6 @@ def main():
     test_env = CustomEnv(test_df, lookback_window_size=lookback_window_size, Show_reward=False)
     test_agent(test_env, agent, visualize=False, test_episodes=10, folder="2021_01_11_23_43_Crypto_trader", name="1076.27_Crypto_trader", comment="")
     """
+    getOrders()
 
 main()
-"""
-lookback_window_size = 50
-train_df = df[:-720-lookback_window_size]
-test_df = df[-720-lookback_window_size:] # 30 days
-
-train_env = CustomEnv(train_df, lookback_window_size=lookback_window_size)
-test_env = CustomEnv(test_df, lookback_window_size=lookback_window_size)
-
-train_agent(train_env, visualize=False, train_episodes=20000, training_batch_size=500)
-test_agent(test_env, visualize=True, test_episodes=1000)
-Random_games(test_env, visualize=False, train_episodes = 1000)
-"""

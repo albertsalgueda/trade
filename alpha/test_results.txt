@@ -1,0 +1,3 @@
+2022-03-20 13:10, 1005.06_Crypto_trader, test episodes:10, net worth:989.8003033594048, orders per episode:439.0, no profit episodes:8, model: Dense, comment: 
+2022-03-20 13:16, 1005.06_Crypto_trader, test episodes:10, net worth:988.2323114595949, orders per episode:448.2, no profit episodes:9, model: Dense, comment: 
+2022-03-20 13:20, 1005.06_Crypto_trader, test episodes:10, net worth:990.8951231919949, orders per episode:447.1, no profit episodes:10, model: Dense, comment: 
