@@ -61,9 +61,14 @@ def openTrade(amount,trades):
 
 def closeTrade(amount,trades):
     print(f'AI sold {amount}, trade: {trades[-1]}')
+    order = client.create_test_order(
+            symbol='BTCUSDT',
+            side="SELL",
+            type="MARKET",
+            quantity=0.1)
 
 def getOrders():
-    orders = client.get_all_orders(symbol='BNBBTC', limit=10)
+    orders = client.get_all_orders(symbol='BTCUSDT', limit=10)
     print(orders)
 
 def getFees(symbol):
