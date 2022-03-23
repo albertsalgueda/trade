@@ -397,7 +397,7 @@ def main():
     #train_agent(train_env, agent, visualize=False, train_episodes=2000, training_batch_size=500)
     
     test_env = CustomEnv(test_df, lookback_window_size=lookback_window_size, Show_reward=False)
-    test_agent(test_env, agent, visualize=False, test_episodes=10, folder="2022_03_19_18_23_Crypto_trader", name="1005.06_Crypto_trader", comment="")
+    test_agent(test_env, agent, visualize=True, test_episodes=10, folder="2022_03_19_18_23_Crypto_trader", name="1005.06_Crypto_trader", comment="")
     """
     agent = CustomAgent(lookback_window_size=lookback_window_size, lr=0.00001, epochs=1, optimizer=Adam, batch_size = 32, model="CNN")
     test_env = CustomEnv(test_df, lookback_window_size=lookback_window_size, Show_reward=False)
