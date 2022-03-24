@@ -19,7 +19,7 @@ import json
 
 class CustomAgent:
     # A custom Bitcoin trading agent
-    def __init__(self, lookback_window_size=50, lr=0.00005, epochs=1, optimizer=Adam, batch_size=32, model="", depth=0, comment=""):
+    def __init__(self, lookback_window_size=50, learning_rate=0.00005, epochs=1, optimizer=Adam, batch_size=32, model="", depth=0, comment=""):
         self.lookback_window_size = lookback_window_size
         self.model = model
         self.comment = comment
@@ -35,13 +35,13 @@ class CustomAgent:
         self.state_size = (lookback_window_size, 5+depth) # 5 standard OHCL information + market and indicators
 
         # Neural Networks part bellow
-        self.lr = lr
+        self.learning_rate = learning_rate
         self.epochs = epochs
         self.optimizer = optimizer
         self.batch_size = batch_size
 
         # Create shared Actor-Critic network model
-        self.Actor = self.Critic = Shared_Model(input_shape=self.state_size, action_space = self.action_space.shape[0], lr=self.lr, optimizer = self.optimizer, model=self.model)
+        self.Actor = self.Critic = Shared_Model(input_shape=self.state_size, action_space = self.action_space.shape[0], learning_rate=self.learning_rate, optimizer = self.optimizer, model=self.model)
         # Create Actor-Critic network model
         #self.Actor = Actor_Model(input_shape=self.state_size, action_space = self.action_space.shape[0], lr=self.lr, optimizer = self.optimizer)
         #self.Critic = Critic_Model(input_shape=self.state_size, action_space = self.action_space.shape[0], lr=self.lr, optimizer = self.optimizer)
@@ -66,7 +66,7 @@ class CustomAgent:
             "training episodes": train_episodes,
             "lookback window size": self.lookback_window_size,
             "depth": self.depth,
-            "lr": self.lr,
+            "learning_rate": self.learning_rate,
             "epochs": self.epochs,
             "batch size": self.batch_size,
             "normalize value": normalize_value,
@@ -345,6 +345,7 @@ def train_agent(env, agent, visualize=False, train_episodes = 50, training_batch
     agent.create_writer(env.initial_balance, env.normalize_value, train_episodes) # create TensorBoard writer
     total_average = deque(maxlen=100) # save recent 100 episodes net worth
     best_average = 0 # used to track best average net worth
+    
     for episode in range(train_episodes):
         state = env.reset(env_steps_size = training_batch_size)
 
@@ -460,7 +461,7 @@ if __name__ == "__main__":
     df = df[100:].dropna()
 
     lookback_window_size = 50
-    test_window = 1000 # 3 months
+    test_window = 100 # 3 months
     
     # split training and testing datasets
     train_df = df[:-test_window-lookback_window_size] # we leave 100 to have properly calculated indicators
@@ -471,12 +472,11 @@ if __name__ == "__main__":
     test_df_nomalized = df_nomalized[-test_window-lookback_window_size:]
 
     # single processing training
-    #agent = CustomAgent(lookback_window_size=lookback_window_size, lr=0.00001, epochs=5, optimizer=Adam, batch_size = 32, model="CNN")
-    #train_env = CustomEnv(df=train_df, df_normalized=train_df_nomalized, lookback_window_size=lookback_window_size)
-    #train_agent(train_env, agent, visualize=False, train_episodes=50000, training_batch_size=500)
-
+    agent = CustomAgent(lookback_window_size=lookback_window_size, learning_rate=0.00001, epochs=5, optimizer=Adam, batch_size = 32, model="CNN")
+    train_env = CustomEnv(df=train_df, df_normalized=train_df_nomalized, lookback_window_size=lookback_window_size)
+    train_agent(train_env, agent, visualize=False, train_episodes=500, training_batch_size=50)
     # multiprocessing training/testing. Note - run from cmd or terminal
-    #agent = CustomAgent(lookback_window_size=lookback_window_size, lr=0.00001, epochs=5, optimizer=Adam, batch_size=32, model="CNN", depth=depth, comment="Normalized")
+    #agent = CustomAgent(lookback_window_size=lookback_window_size, learning_rate=0.00001, epochs=5, optimizer=Adam, batch_size=32, model="CNN", depth=depth, comment="Normalized")
     #train_multiprocessing(CustomEnv, agent, train_df, train_df_nomalized, num_worker = 32, training_batch_size=500, visualize=False, EPISODES=200000)
 
     #test_multiprocessing(CustomEnv, CustomAgent, test_df, test_df_nomalized, num_worker = 16, visualize=False, test_episodes=1000, folder="2021_02_18_21_48_Crypto_trader", name="3906.52_Crypto_trader", comment="3 months")

@@ -14,7 +14,7 @@ if len(gpus) > 0:
     except RuntimeError: pass
 
 class Shared_Model:
-    def __init__(self, input_shape, action_space, lr, optimizer, model="Dense"):
+    def __init__(self, input_shape, action_space, learning_rate, optimizer, model="Dense"):
         X_input = Input(input_shape)
         self.action_space = action_space
 
@@ -43,7 +43,7 @@ class Shared_Model:
         value = Dense(1, activation=None)(V)
 
         self.Critic = Model(inputs=X_input, outputs = value)
-        self.Critic.compile(loss=self.critic_PPO2_loss, optimizer=optimizer(lr=lr))
+        self.Critic.compile(loss=self.critic_PPO2_loss, optimizer=optimizer(learning_rate=learning_rate))
 
         # Actor model
         A = Dense(512, activation="relu")(X)
@@ -52,7 +52,7 @@ class Shared_Model:
         output = Dense(self.action_space, activation="softmax")(A)
 
         self.Actor = Model(inputs = X_input, outputs = output)
-        self.Actor.compile(loss=self.ppo_loss, optimizer=optimizer(lr=lr))
+        self.Actor.compile(loss=self.ppo_loss, optimizer=optimizer(learning_rate=learning_rate))
         #print(self.Actor.summary())
 
     def ppo_loss(self, y_true, y_pred):
@@ -93,7 +93,7 @@ class Shared_Model:
 
         
 class Actor_Model:
-    def __init__(self, input_shape, action_space, lr, optimizer):
+    def __init__(self, input_shape, action_space, learning_rate, optimizer):
         X_input = Input(input_shape)
         self.action_space = action_space
 
@@ -104,7 +104,7 @@ class Actor_Model:
         output = Dense(self.action_space, activation="softmax")(X)
 
         self.Actor = Model(inputs = X_input, outputs = output)
-        self.Actor.compile(loss=self.ppo_loss, optimizer=optimizer(lr=lr))
+        self.Actor.compile(loss=self.ppo_loss, optimizer=optimizer(learning_rate=learning_rate))
         #print(self.Actor.summary)
 
     def ppo_loss(self, y_true, y_pred):
@@ -137,7 +137,7 @@ class Actor_Model:
         return self.Actor.predict(state)
 
 class Critic_Model:
-    def __init__(self, input_shape, action_space, lr, optimizer):
+    def __init__(self, input_shape, action_space, learning_rate, optimizer):
         X_input = Input(input_shape)
 
         V = Flatten(input_shape=input_shape)(X_input)
@@ -147,7 +147,7 @@ class Critic_Model:
         value = Dense(1, activation=None)(V)
 
         self.Critic = Model(inputs=X_input, outputs = value)
-        self.Critic.compile(loss=self.critic_PPO2_loss, optimizer=optimizer(lr=lr))
+        self.Critic.compile(loss=self.critic_PPO2_loss, optimizer=optimizer(learning_rate=learning_rate))
 
     def critic_PPO2_loss(self, y_true, y_pred):
         value_loss = K.mean((y_true - y_pred) ** 2) # standard PPO loss
